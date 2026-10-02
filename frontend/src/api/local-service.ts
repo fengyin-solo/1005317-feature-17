@@ -1,6 +1,6 @@
 import { MODULE_BY_KEY } from '@/data/modules'
-import { allRows, listRows, resetRows, saveRows } from '@/data/local-store'
-import type { ActionResult, EntryRow, ModuleMeta, OverviewResult, PageResult } from '@/data/types'
+import { allRows, listLedger, listRows, resetLedger, resetRows, saveLedger, saveRows } from '@/data/local-store'
+import type { ActionResult, EntryRow, LedgerEntry, ModuleMeta, OverviewResult, PageResult } from '@/data/types'
 
 // 会写进数据的「往回走」动作：命中就把这条记录标成异常态，看板上能一眼看出来。
 const NEGATIVE_ACTIONS = ['撤销', '作废', '拒绝', '驳回', '停用', '忽略', '下线', '回滚']
@@ -102,4 +102,13 @@ export function loadOverview(): OverviewResult {
     { label: '异常量', value: modules.reduce((sum, item) => sum + item.abnormal, 0) },
   ]
   return { cards, modules }
+}
+
+// 浮选送检台账：只接收办结（已完成）且重量不超限的样品。
+export function ledgerEntries(): LedgerEntry[] {
+  return listLedger()
+}
+
+export function resetFlotationLedger(): LedgerEntry[] {
+  return resetLedger()
 }
